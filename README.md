@@ -10,6 +10,7 @@ The repository contains 4 .py files:
 -Breadboard.py: It includes the declaration of the necessary qubits.
 -qint.py: This file contains the comparator circuit.
 -qmath.py: Includes the subtractors, adders and squaring circuits.
+-comparator.py: The generic design of the comparator. This file is not used in 2DCompleto.py, it is ready for the evaluation of the proposed comparator only.
 
 The description of each circuit is included in the referenced paper.
 
