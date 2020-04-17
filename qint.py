@@ -1,51 +1,67 @@
+#
+#Comparator circuit. It only uses 1 ancilla input
+#@version 1.0
+#@author: Francisco Orts <francisco.orts@ual.es>
+#
+
 from projectq.ops import X, CNOT, Toffoli
 
-#A5->yi2, A4->yi1, A3->yi0, A2->xi2, A1->xi1, A0->xi0
-#ai7->bi6, ai6->z, ai5->bi5, ai2->bi2, ai1->bi1, x0->yj0
 def comparing(bb):
     #Step 1
-    X | bb.xi0
-    X | bb.xi1
-    X | bb.xi2
-    X | bb.yi0
-    X | bb.yi1
-    X | bb.yi2
+    X | bb.yj0
+    X | bb.bi1
+    X | bb.bi2
+    X | bb.bi5
+    X | bb.z
+    X | bb.bi6
 
     #Step 2
-    CNOT | (bb.xi0, bb.yj0)
-    CNOT | (bb.xi1, bb.bi1)
-    CNOT | (bb.xi2, bb.bi2)
-    CNOT | (bb.yi0, bb.bi5)
-    CNOT | (bb.yi1, bb.z)
-    CNOT | (bb.yi2, bb.bi6)
+    CNOT | (bb.bi1, bb.xi1)
+    CNOT | (bb.bi2, bb.xi2)
+    CNOT | (bb.bi5, bb.yi0)
+    CNOT | (bb.z, bb.yi1)
+    CNOT | (bb.bi6, bb.yi2)
 
     #Step 3
-    CNOT | (bb.xi0, bb.cin2)
+    CNOT | (bb.bi6, bb.result)
+    CNOT | (bb.z, bb.bi6)
+    CNOT | (bb.bi5, bb.z)
+    CNOT | (bb.bi2, bb.bi5)
+    CNOT | (bb.bi1, bb.bi2)
 
     #Step 4
-    CNOT | (bb.xi1, bb.xi0)
+    Toffoli | (bb.xi0, bb.yj0, bb.bi1)
+    Toffoli | (bb.xi1, bb.bi1, bb.bi2)
+    Toffoli | (bb.xi2, bb.bi2, bb.bi5)
+    Toffoli | (bb.yi0, bb.bi5, bb.z)
+    Toffoli | (bb.yi1, bb.z, bb.bi6)
+    Toffoli | (bb.yi2, bb.bi6, bb.result) #The result
 
-    #Step 5
-    Toffoli | (bb.yj0, bb.cin2, bb.xi0)
-    CNOT | (bb.xi2, bb.xi1)
+    #UNCOMPUTE TO AVOID GABAGE OUTPUTS
+    #Step 4
+    Toffoli | (bb.yi1, bb.z, bb.bi6)
+    Toffoli | (bb.yi0, bb.bi5, bb.z)
+    Toffoli | (bb.xi2, bb.bi2, bb.bi5)
+    Toffoli | (bb.xi1, bb.bi1, bb.bi2)
+    Toffoli | (bb.xi0, bb.yj0, bb.bi1)
 
-    #Step 6
-    Toffoli | (bb.bi1, bb.xi0, bb.xi1)
-    CNOT | (bb.yi0, bb.xi2)
+    #Step 3
+    CNOT | (bb.bi1, bb.bi2)
+    CNOT | (bb.bi2, bb.bi5)
+    CNOT | (bb.bi5, bb.z)
+    CNOT | (bb.z, bb.bi6)
 
-    #Step 7
-    Toffoli | (bb.bi2, bb.xi1, bb.xi2)
-    CNOT | (bb.yi1, bb.yi0)
+    #Step 2
+    CNOT | (bb.bi1, bb.xi1)
+    CNOT | (bb.bi2, bb.xi2)
+    CNOT | (bb.bi5, bb.yi0)
+    CNOT | (bb.z, bb.yi1)
+    CNOT | (bb.bi6, bb.yi2)
 
-    #Step 8
-    Toffoli | (bb.bi5, bb.xi2, bb.yi0)
-    CNOT | (bb.yi2, bb.yi1)
-
-    #Step 9
-    Toffoli | (bb.z, bb.yi0, bb.yi1)
-
-    #Step 10
-    CNOT | (bb.yi1, bb.bi6)
-
-    #Step 11
-    CNOT | (bb.bi6, bb.result)
+    #Step 1
+    X | bb.yj0
+    X | bb.bi1
+    X | bb.bi2
+    X | bb.bi5
+    X | bb.z
+    X | bb.bi6
