@@ -6,7 +6,7 @@ This code implements a proposed design of a quantum circuit for the computation 
 The circuit has been built using ProjectQ, an open-source software framework for quantum computing. More information about ProjectQ is available in https://projectq.ch/.
 
 The repository contains 4 .py files:
--2DCompleto.py: The main file. Run this file to test the example. It accepts 4 input arguments: Xi, Xj, Yi, Yj, and the upper bound. The coordinates are limited to 3 (binary) digits, and the upper bound to 6.
+-2Dmain.py: The main file. Run this file to test the example. It accepts 4 input arguments: Xi, Xj, Yi, Yj, and the upper bound. The coordinates are limited to 3 (binary) digits, and the upper bound to 6.
 -Breadboard.py: It includes the declaration of the necessary qubits.
 -qint.py: This file contains the comparator circuit.
 -qmath.py: Includes the subtractors, adders and squaring circuits.
